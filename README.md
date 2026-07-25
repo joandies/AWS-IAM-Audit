@@ -419,7 +419,7 @@ iam_audit/
 
 ## Running tests
 
-The suite has 34 tests covering all six checks, including positive detections, severity levels, and negative cases (safe policies that should produce no findings).
+The suite has 36 tests covering all six checks, including positive detections, severity levels, and negative cases (safe policies that should produce no findings).
 
 ```bash
 python -m pytest -v
