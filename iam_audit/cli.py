@@ -1,5 +1,6 @@
 import argparse
 import sys
+import glob
 
 from iam_audit.loader import load_policy
 from iam_audit.analyzer import analyze
@@ -35,10 +36,17 @@ def main():
     )
 
     args = parser.parse_args()
+    files = []
+    for pattern in args.files:
+        matches = glob.glob(pattern)
+        if matches:
+            files.extend(matches)
+        else:
+            files.append(pattern)
     checks = build_checks()
     exit_code = 0
 
-    for filepath in args.files:
+    for filepath in files:
         try:
             policy = load_policy(filepath)
         except ValueError as e:

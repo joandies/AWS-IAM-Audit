@@ -47,6 +47,13 @@ class TestWildcardResourceCheck(unittest.TestCase):
         ])
         findings = self.check.run(policy)
         self.assertEqual(len(findings), 0)
+    
+    def test_describe_actions_on_wildcard_resource_produce_no_findings(self):
+        policy = self._make_policy([
+            {"Effect": "Allow", "Action": ["ec2:DescribeInstances"], "Resource": "*"}
+        ])
+        findings = self.check.run(policy)
+        self.assertEqual(len(findings), 0)
 
 
 if __name__ == "__main__":
