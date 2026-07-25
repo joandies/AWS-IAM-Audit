@@ -80,7 +80,7 @@ Exit code is 0 if no findings are detected, 1 if any findings or errors occur. T
 
 ## Example output
 
-Running the tool against a vulnerable policy prints each finding with its severity, location, risk, and remediation:
+Running the tool against a vulnerable policy prints each finding with its severity, location, risk, and remediation. This example file deliberately contains more than one escalation path to show that the check reports each one separately:
 
 ```
 $ python -m iam_audit examples/vulnerable/04_privilege_escalation.json
@@ -97,13 +97,13 @@ Results for: examples/vulnerable/04_privilege_escalation.json
   Statement : N/A
   Description : The policy grants actions that form a known escalation path (ESC-001): ec2:RunInstances, iam:PassRole.
   Risk        : Can launch an EC2 instance with an admin role attached, then use that instance to make API calls as the admin role.
-  Remediation : Remove the escalation-enabling permissions if they are not required. If iam:PassRole is needed, restrict it with a condition limiting which roles can be passed.
+  Remediation : Remove either permission if not required. If iam:PassRole is needed, scope it to specific role ARNs and add an iam:PassedToService condition so roles can only be passed to the intended service.
 
 [CRITICAL] IAM-004 - Privilege escalation path detected (ESC-002)
   Statement : N/A
   Description : The policy grants actions that form a known escalation path (ESC-002): iam:CreatePolicyVersion.
   Risk        : Can create a new version of an existing IAM policy with arbitrary permissions, effectively rewriting any policy to grant admin access.
-  Remediation : Remove the escalation-enabling permissions if they are not required. If iam:PassRole is needed, restrict it with a condition limiting which roles can be passed.
+  Remediation : Remove iam:CreatePolicyVersion unless the principal manages policies as its core function. If required, scope the Resource to specific policy ARNs rather than granting it account-wide.
 ```
 
 A single file can trigger multiple checks at different severities. Here a public resource policy produces one CRITICAL finding:

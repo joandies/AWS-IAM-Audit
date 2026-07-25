@@ -57,7 +57,23 @@ class TestPrivilegeEscalationCheck(unittest.TestCase):
         ])
         findings = self.check.run(policy)
         self.assertEqual(len(findings), 0)
+        
+    def test_remediation_is_path_specific(self):
+        policy = self._make_policy([
+            {"Effect": "Allow", "Action": "iam:CreatePolicyVersion", "Resource": "*"}
+        ])
+        findings = self.check.run(policy)
+        self.assertEqual(len(findings), 1)
+        self.assertIn("iam:CreatePolicyVersion", findings[0].remediation)
+        self.assertNotIn("iam:PassRole", findings[0].remediation)
 
+    def test_passrole_remediation_mentions_passrole(self):
+        policy = self._make_policy([
+            {"Effect": "Allow", "Action": ["iam:PassRole", "ec2:RunInstances"], "Resource": "*"}
+        ])
+        findings = self.check.run(policy)
+        self.assertEqual(len(findings), 1)
+        self.assertIn("iam:PassRole", findings[0].remediation)
 
 if __name__ == "__main__":
     unittest.main()
