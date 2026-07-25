@@ -30,7 +30,11 @@ class TrustPolicyCheck(BaseCheck):
 
             if not is_wildcard:
                 continue
-
+            actions = statement.get("Action", [])
+            if isinstance(actions, str):
+                actions = [actions]
+            if "sts:AssumeRole" not in actions:
+                continue
             conditions = statement.get("Condition", {})
             condition_keys = set()
             for operator in conditions.values():

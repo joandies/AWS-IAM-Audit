@@ -23,7 +23,8 @@ def print_findings(findings: list[Finding], filepath: str) -> None:
         severity_label = finding.severity.value.upper()
 
         print(f"{color}{BOLD}[{severity_label}] {finding.check_id} - {finding.title}{RESET}")
-        print(f"  Statement : #{finding.statement_index}")
+        statement_label = str(finding.statement_index) if finding.statement_index >= 0 else "N/A"
+        print(f"  Statement : {statement_label}")
         print(f"  Description : {finding.description}")
         print(f"  Risk        : {finding.risk}")
         print(f"  Remediation : {finding.remediation}")

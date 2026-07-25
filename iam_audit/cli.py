@@ -5,9 +5,22 @@ from iam_audit.loader import load_policy
 from iam_audit.analyzer import analyze
 from iam_audit.report import print_findings
 
+from iam_audit.checks.wildcard_action import WildcardActionCheck
+from iam_audit.checks.wildcard_resource import WildcardResourceCheck
+from iam_audit.checks.admin_equivalent import AdminEquivalentCheck
+from iam_audit.checks.privilege_escalation import PrivilegeEscalationCheck
+from iam_audit.checks.trust_policy import TrustPolicyCheck
+from iam_audit.checks.public_resource import PublicResourceCheck
 
 def build_checks():
-    return []
+    return [
+        WildcardActionCheck(),
+        WildcardResourceCheck(),
+        AdminEquivalentCheck(),
+        PrivilegeEscalationCheck(),
+        TrustPolicyCheck(),
+        PublicResourceCheck(),
+    ]
 
 
 def main():
