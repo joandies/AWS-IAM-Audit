@@ -221,24 +221,14 @@ The check looks across all statements in the policy, not just within a single st
   "Statement": [
     {
       "Effect": "Allow",
-      "Action": "ec2:RunInstances",
+      "Action": "ec2:DescribeInstances",
       "Resource": "*"
-    },
-    {
-      "Effect": "Allow",
-      "Action": "iam:PassRole",
-      "Resource": "arn:aws:iam::123456789012:role/my-specific-ec2-role",
-      "Condition": {
-        "StringEquals": {
-          "iam:PassedToService": "ec2.amazonaws.com"
-        }
-      }
     }
   ]
 }
 ```
 
-**Remediation:** Remove escalation-enabling permissions where not required. If `iam:PassRole` is genuinely needed, restrict it to a specific role ARN and add a condition limiting which service the role can be passed to.
+**Remediation:** Remove escalation-enabling permissions where they are not required. The safest fix is to eliminate the dangerous combination entirely, as shown above. If `iam:PassRole` is genuinely needed, scope it to a specific role ARN and add a condition such as `iam:PassedToService` to restrict which service the role can be passed to. Note that this tool's condition analysis is presence-based and will still flag a scoped-and-conditioned PassRole as part of an escalation path; see Known limitations.
 
 ---
 
